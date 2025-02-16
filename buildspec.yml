@@ -1,24 +1,22 @@
 version: 0.2
 
 phases:
+  install:
+    commands:
+      - echo Installing Maven...
+      - yum install -y maven
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 676636338940.dkr.ecr.us-east-2.amazonaws.com
-
+      - echo Building Spring Boot application...
+      - mvn clean package -DskipTests
   build:
     commands:
       - echo Building the Docker image...
       - docker build -t springboot-app .
       - docker tag springboot-app:latest 676636338940.dkr.ecr.us-east-2.amazonaws.com/springboot-app:latest
-
   post_build:
     commands:
       - echo Pushing the Docker image to ECR...
       - docker push 676636338940.dkr.ecr.us-east-2.amazonaws.com/springboot-app:latest
-      - echo Writing image details to imagedefinitions.json...
-      - printf '[{"name":"springboot-app","imageUri":"%s"}]' 676636338940.dkr.ecr.us-east-2.amazonaws.com/springboot-app:latest > imagedefinitions.json
-
-artifacts:
-  files:
-    - imagedefinitions.json
