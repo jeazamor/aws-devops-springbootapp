@@ -8,15 +8,15 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 676636338940.dkr.ecr.us-east-2.amazonaws.com
+      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 665237256694.dkr.ecr.us-east-2.amazonaws.com
       - echo Building Spring Boot application...
       - mvn clean package -DskipTests
   build:
     commands:
       - echo Building the Docker image...
       - docker build -t springboot-app .
-      - docker tag springboot-app:latest 676636338940.dkr.ecr.us-east-2.amazonaws.com/springboot-app:latest
+      - docker tag springboot-app:latest 665237256694.dkr.ecr.us-east-2.amazonaws.com/springboot-app:latest
   post_build:
     commands:
       - echo Pushing the Docker image to ECR...
-      - docker push 676636338940.dkr.ecr.us-east-2.amazonaws.com/springboot-app:latest
+      - docker push 665237256694.dkr.ecr.us-east-2.amazonaws.com/springboot-app:latest
